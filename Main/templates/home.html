@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Security Surveillance System - Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="security-matrix-bg">
+    <div class="grid-overlay"></div>
+    
+    <header class="main-navbar">
+        <div class="nav-brand-container">
+            <span class="pulse-node neon-green-pulse"></span>
+            <span class="brand-text-logo">AI SURVEILLANCE MATRIX</span>
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'login' %}" class="btn-nav outline-glow">Access Terminal</a>
+            <a href="{% url 'register' %}" class="btn-nav solid-glow">Enroll Node</a>
+        </nav>
+    </header>
+
+    <main class="home-hero-viewport">
+        <section class="hero-content-block">
+            <div class="system-status-badge glass-panel">
+                <span class="status-dot-active"></span>
+                <span class="status-badge-text">CENTRAL CORE: ONLINE</span>
+            </div>
+            
+            <h1 class="hero-title-headline">AI Security Surveillance System</h1>
+            <p class="hero-description-text">Next-generation predictive edge perimeter defense powered by localized computer vision analytics, instant hardware telemetry routing, and automated neural network notification routing engines.</p>
+            
+            <div class="hero-action-cluster">
+                <a href="{% url 'login' %}" class="btn-hero-primary cta-neon-blue">Initialize Control Link</a>
+                <a href="{% url 'register' %}" class="btn-hero-secondary">Provision Workspace</a>
+            </div>
+        </section>
+
+        <section class="hero-metrics-sidebar">
+            <div class="telemetry-widget glass-panel cyan-border-hover">
+                <div class="widget-header">
+                    <h4>Neural Pipeline</h4>
+                    <span class="widget-icon">⚡</span>
+                </div>
+                <div class="widget-data">
+                    <span class="data-value">0.014s</span>
+                    <span class="data-label">Inference Latency</span>
+                </div>
+            </div>
+
+            <div class="telemetry-widget glass-panel green-border-hover">
+                <div class="widget-header">
+                    <h4>Active Hardware</h4>
+                    <span class="widget-icon">🔒</span>
+                </div>
+                <div class="widget-data">
+                    <span class="data-value">99.98%</span>
+                    <span class="data-label">Node Integrity</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>

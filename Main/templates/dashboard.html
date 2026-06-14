@@ -1,0 +1,194 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CCTV Security Matrix</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0f1a;
+            color: #ffffff;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: #111827;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            background: red;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        /* STATS SECTION */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            width: 180px;
+            margin: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #cbd5e1;
+        }
+
+        .card p {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* ALERT GRID */
+        .alerts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .alert-card {
+            background: #111827;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid red;
+            transition: 0.3s;
+        }
+
+        .alert-card:hover {
+            transform: scale(1.02);
+        }
+
+        .alert-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .safe {
+            background: #22c55e;
+            color: white;
+        }
+
+        .status {
+            font-weight: bold;
+            color: #facc15;
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            text-align: center;
+            margin-top: 50px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>🛡 CCTV Security Matrix</h2>
+    <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+    <div class="card">
+        <h3>Total Alerts</h3>
+        <p>{{ alerts|length }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Safe Events</h3>
+        <p>{{ safe_count|default:0 }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Threats Detected</h3>
+        <p>{{ alerts|length }}</p>
+    </div>
+</div>
+
+
+<div class="alerts-container">
+
+    {% if alerts %}
+
+        {% for alert in alerts %}
+        <div class="alert-card">
+
+            <p><b>⏱ Time:</b> {{ alert.timestamp }}</p>
+            <p><b>Status:</b> <span class="status">{{ alert.status }}</span></p>
+
+            {% if alert.image %}
+                <img src="{{ alert.image.url }}">
+            {% endif %}
+
+            <div class="buttons">
+                <a href="/report/{{ alert.id }}/">
+                    <button class="btn danger">Report</button>
+                </a>
+
+                <a href="/safe/{{ alert.id }}/">
+                    <button class="btn safe">Mark Safe</button>
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="empty">
+            No security alerts detected yet.
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
