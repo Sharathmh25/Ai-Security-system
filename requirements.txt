@@ -1,5 +1,0 @@
-Django==4.2.30
-gunicorn
-dj-database-url
-psycopg2-binary
-Pillow
