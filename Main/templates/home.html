@@ -1,67 +1,180 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Security Surveillance System - Home</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Telemetry Core - Home</title>
+    <style>
+        /* ==========================================================================
+           GLOBAL DESIGN VARIABLES & ENGINES
+           ========================================================================== */
+        :root {
+            --bg-dark-core: #070b14;
+            --glass-panel-bg: rgba(15, 23, 42, 0.45);
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --neon-blue: #06b6d4;
+            --neon-green: #10b981;
+            --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-telemetry: 'Courier New', Courier, monospace;
+            --layer-blur: blur(16px);
+            --smooth-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body.security-matrix-bg {
+            font-family: var(--font-ui);
+            background-color: var(--bg-dark-core);
+            color: #f8fafc;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 30%, #0d1b3a 0%, #070b14 80%),
+                linear-gradient(rgba(6, 182, 212, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 25px 25px, 25px 25px;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .grid-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1;
+        }
+
+        /* ==========================================================================
+           MAIN NAVIGATION LAYER
+           ========================================================================== */
+        .main-navbar {
+            display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 3rem;
+            background: rgba(11, 15, 26, 0.6); backdrop-filter: var(--layer-blur); -webkit-backdrop-filter: var(--layer-blur);
+            border-bottom: 1px solid var(--border-subtle); position: relative; z-index: 10;
+        }
+
+        .nav-brand-container { display: flex; align-items: center; gap: 0.75rem; }
+        .brand-text-logo { font-family: var(--font-telemetry); font-weight: 600; letter-spacing: 1.5px; font-size: 1rem; color: #ffffff; }
+        .pulse-node { width: 10px; height: 10px; border-radius: 50%; }
+        .neon-green-pulse { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); animation: activePulse 2s infinite; }
+        .nav-links { display: flex; gap: 1.25rem; }
+
+        /* ==========================================================================
+           LANDING HERO MODULES
+           ========================================================================== */
+        .home-hero-viewport {
+            flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; padding: 0 3rem;
+            display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; gap: 4rem; position: relative; z-index: 5;
+        }
+
+        .hero-content-block { display: flex; flex-direction: column; align-items: flex-start; }
+        
+        .system-status-badge {
+            display: flex; align-items: center; gap: 0.5rem; padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 50px; margin-bottom: 1.5rem;
+        }
+
+        .status-dot-active { width: 6px; height: 6px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 8px var(--neon-green); }
+        .status-badge-text { font-size: 0.75rem; font-family: var(--font-telemetry); color: #94a3b8; letter-spacing: 1px; }
+
+        .hero-title-headline {
+            font-size: 3.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -1px; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #64748b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description-text { font-size: 1.05rem; color: #94a3b8; line-height: 1.6; margin-bottom: 2.5rem; max-width: 600px; }
+        .hero-action-cluster { display: flex; gap: 1.25rem; }
+
+        .btn-nav, .btn-hero-primary, .btn-hero-secondary {
+            padding: 0.65rem 1.25rem; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 600; text-decoration: none; border-radius: 6px; transition: var(--smooth-transition);
+        }
+
+        .btn-nav.outline-glow { border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1; }
+        .btn-nav.outline-glow:hover { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.2); color: #ffffff; }
+        .btn-nav.solid-glow, .btn-hero-primary { background: var(--neon-blue); color: #070b14; }
+        .btn-nav.solid-glow:hover, .btn-hero-primary:hover { transform: translateY(-1px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+        .btn-hero-primary { padding: 0.9rem 2rem; font-size: 0.95rem; }
+        
+        .btn-hero-secondary {
+            padding: 0.9rem 2rem; font-size: 0.95rem; border: 1px solid rgba(255, 255, 255, 0.08); color: #ffffff; background: rgba(255, 255, 255, 0.01);
+        }
+        .btn-hero-secondary:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.15); }
+
+        .hero-metrics-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .telemetry-widget {
+            background: var(--glass-panel-bg); border: 1px solid var(--border-subtle); backdrop-filter: var(--layer-blur); border-radius: 14px; padding: 1.5rem; transition: var(--smooth-transition);
+        }
+
+        .cyan-border-hover:hover { border-color: rgba(6, 182, 212, 0.3); transform: translateX(4px); }
+        .green-border-hover:hover { border-color: rgba(34, 197, 94, 0.3); transform: translateX(4px); }
+        .widget-header h4 { font-size: 0.8rem; text-transform: uppercase; color: #64748b; letter-spacing: 0.75px; margin-bottom: 1rem; }
+        .widget-data { display: flex; flex-direction: column; }
+        .widget-data .data-value { font-family: var(--font-telemetry); font-size: 1.75rem; font-weight: 700; color: #ffffff; }
+        .widget-data .data-label { font-size: 0.8rem; color: #94a3b8; }
+
+        @keyframes activePulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        @media (max-width: 968px) {
+            .home-hero-viewport { grid-template-columns: 1fr; text-align: center; gap: 3rem; padding: 0 1.5rem; margin: 3rem 0; }
+            .hero-content-block { align-items: center; }
+            .hero-title-headline { font-size: 2.5rem; }
+            .main-navbar { padding: 1rem 1.5rem; }
+        }
+    </style>
 </head>
 <body class="security-matrix-bg">
     <div class="grid-overlay"></div>
-    
-    <header class="main-navbar">
+
+    <nav class="main-navbar">
         <div class="nav-brand-container">
-            <span class="pulse-node neon-green-pulse"></span>
-            <span class="brand-text-logo">AI SURVEILLANCE MATRIX</span>
+            <div class="pulse-node neon-green-pulse"></div>
+            <span class="brand-text-logo">MATRIX_MONITOR_v1</span>
         </div>
-        <nav class="nav-links">
-            <a href="{% url 'login' %}" class="btn-nav outline-glow">Access Terminal</a>
-            <a href="{% url 'register' %}" class="btn-nav solid-glow">Enroll Node</a>
-        </nav>
-    </header>
+        <div class="nav-links">
+            <a href="{% url 'login' %}" class="btn-nav outline-glow">Sign In</a>
+            <a href="{% url 'register' %}" class="btn-nav solid-glow">Initialize System</a>
+        </div>
+    </nav>
 
     <main class="home-hero-viewport">
-        <section class="hero-content-block">
-            <div class="system-status-badge glass-panel">
+        <div class="hero-content-block">
+            <div class="system-status-badge">
                 <span class="status-dot-active"></span>
-                <span class="status-badge-text">CENTRAL CORE: ONLINE</span>
+                <span class="status-badge-text">NODE_CLUSTER_ONLINE</span>
             </div>
-            
-            <h1 class="hero-title-headline">AI Security Surveillance System</h1>
-            <p class="hero-description-text">Next-generation predictive edge perimeter defense powered by localized computer vision analytics, instant hardware telemetry routing, and automated neural network notification routing engines.</p>
-            
+            <h1 class="hero-title-headline">Real-time Embedded Node Monitoring Subsystem</h1>
+            <p class="hero-description-text">
+                Track current, catch hardware power spikes on your ESP32 infrastructure networks, and view terminal runtime notifications instantaneously.
+            </p>
             <div class="hero-action-cluster">
-                <a href="{% url 'login' %}" class="btn-hero-primary cta-neon-blue">Initialize Control Link</a>
-                <a href="{% url 'register' %}" class="btn-hero-secondary">Provision Workspace</a>
+                <a href="{% url 'register' %}" class="btn-hero-primary">Deploy Core Dashboard</a>
+                <a href="{% url 'login' %}" class="btn-hero-secondary">System Access</a>
             </div>
-        </section>
+        </div>
 
-        <section class="hero-metrics-sidebar">
-            <div class="telemetry-widget glass-panel cyan-border-hover">
+        <div class="hero-metrics-sidebar">
+            <div class="telemetry-widget cyan-border-hover">
                 <div class="widget-header">
-                    <h4>Neural Pipeline</h4>
-                    <span class="widget-icon">⚡</span>
+                    <h4>Cluster Response Latency</h4>
                 </div>
                 <div class="widget-data">
-                    <span class="data-value">0.014s</span>
-                    <span class="data-label">Inference Latency</span>
+                    <span class="data-value">14ms</span>
+                    <span class="data-label">Average system turnaround time</span>
                 </div>
             </div>
 
-            <div class="telemetry-widget glass-panel green-border-hover">
+            <div class="telemetry-widget green-border-hover">
                 <div class="widget-header">
-                    <h4>Active Hardware</h4>
-                    <span class="widget-icon">🔒</span>
+                    <h4>Active Nodes</h4>
                 </div>
                 <div class="widget-data">
-                    <span class="data-value">99.98%</span>
-                    <span class="data-label">Node Integrity</span>
+                    <span class="data-value">01</span>
+                    <span class="data-label">ESP32 Core Bus Active</span>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
-
-    <script src="{% static 'js/home.js' %}"></script>
 </body>
 </html>

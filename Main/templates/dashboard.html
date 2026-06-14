@@ -6,137 +6,268 @@
     <title>CCTV Security Matrix</title>
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b0f1a;
-            color: #ffffff;
+        /* ==========================================================================
+           GLOBAL DARK MATRIX UTILITIES
+           ========================================================================== */
+        :root {
+            --bg-dark-core: #070b14;
+            --glass-panel-bg: rgba(15, 23, 42, 0.45);
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --neon-blue: #06b6d4;
+            --neon-green: #10b981;
+            --neon-red: #ef4444;
+            --neon-yellow: #facc15;
+            --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-telemetry: 'Courier New', Courier, monospace;
+            --layer-blur: blur(16px);
+            --smooth-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* NAVBAR */
+        body {
+            margin: 0;
+            font-family: var(--font-ui);
+            background-color: var(--bg-dark-core);
+            color: #f8fafc;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 30%, #0d1b3a 0%, #070b14 80%),
+                linear-gradient(rgba(6, 182, 212, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 25px 25px, 25px 25px;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR LAYER */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 25px;
-            background: #111827;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            padding: 1.25rem 3rem;
+            background: rgba(11, 15, 26, 0.6);
+            backdrop-filter: var(--layer-blur);
+            -webkit-backdrop-filter: var(--layer-blur);
+            border-bottom: 1px solid var(--border-subtle);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .navbar h2 {
             margin: 0;
-            font-size: 20px;
+            font-family: var(--font-telemetry);
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #ffffff;
         }
 
         .navbar a {
-            color: white;
+            color: #ffffff;
             text-decoration: none;
-            background: red;
-            padding: 8px 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 16px;
             border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--smooth-transition);
         }
 
-        /* STATS SECTION */
+        .navbar a:hover {
+            background: var(--neon-red);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* METRICS STATS LAYER */
         .stats {
             display: flex;
-            justify-content: space-around;
-            margin: 20px;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2.5rem auto;
+            max-width: 1200px;
+            padding: 0 20px;
             flex-wrap: wrap;
         }
 
         .card {
-            background: #1f2937;
-            padding: 15px;
-            border-radius: 10px;
+            background: var(--glass-panel-bg);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: var(--layer-blur);
+            padding: 1.5rem;
+            border-radius: 14px;
             text-align: center;
-            width: 180px;
-            margin: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+            width: 220px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: var(--smooth-transition);
+        }
+
+        .card:hover {
+            border-color: rgba(6, 182, 212, 0.25);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.1);
+            transform: translateY(-2px);
         }
 
         .card h3 {
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #cbd5e1;
+            margin: 0 0 0.5rem 0;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+            color: #64748b;
         }
 
         .card p {
-            font-size: 22px;
-            font-weight: bold;
+            margin: 0;
+            font-family: var(--font-telemetry);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #ffffff;
         }
 
-        /* ALERT GRID */
+        /* TARGET SYSTEM GRID AND CARDS */
         .alerts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 0 3rem 3rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .alert-card {
-            background: #111827;
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 4px solid red;
-            transition: 0.3s;
+            background: var(--glass-panel-bg);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: var(--layer-blur);
+            border-radius: 14px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--neon-red);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: var(--smooth-transition);
         }
 
         .alert-card:hover {
-            transform: scale(1.02);
+            transform: translateY(-4px);
+            border-left-color: #ff6b6b;
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .alert-card p {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin: 0 0 0.75rem 0;
+            line-height: 1.4;
+        }
+
+        .alert-card p b {
+            color: #94a3b8;
+            font-weight: 500;
         }
 
         .alert-card img {
             width: 100%;
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #02040a;
+            transition: var(--smooth-transition);
         }
 
+        .alert-card:hover img {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ACTIONS AND TRIGGERS LAYER */
         .buttons {
-            margin-top: 10px;
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .buttons a {
+            flex: 1;
+            text-decoration: none;
         }
 
         .btn {
-            padding: 6px 10px;
-            border: none;
-            border-radius: 5px;
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid transparent;
+            border-radius: 8px;
             cursor: pointer;
-            margin-right: 5px;
-            font-size: 12px;
+            font-family: var(--font-ui);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--smooth-transition);
         }
 
         .danger {
-            background: #ef4444;
-            color: white;
+            background: rgba(239, 68, 68, 0.06);
+            border-color: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+        }
+
+        .danger:hover {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
         }
 
         .safe {
-            background: #22c55e;
-            color: white;
+            background: rgba(16, 185, 129, 0.06);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #a7f3d0;
+        }
+
+        .safe:hover {
+            background: var(--neon-green);
+            border-color: var(--neon-green);
+            color: #070b14;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
 
         .status {
-            font-weight: bold;
-            color: #facc15;
+            font-family: var(--font-telemetry);
+            font-weight: 700;
+            color: var(--neon-yellow);
+            text-transform: uppercase;
+            background: rgba(250, 204, 21, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(250, 204, 21, 0.15);
         }
 
-        /* EMPTY STATE */
+        /* SUBSYSTEM EMPTY RUNTIMES */
         .empty {
+            grid-column: 1 / -1;
             text-align: center;
-            margin-top: 50px;
-            color: #9ca3af;
+            padding: 5rem 2rem;
+            background: var(--glass-panel-bg);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #64748b;
+            font-family: var(--font-telemetry);
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* RESPONSIVE LAYOUT RESPONSES */
+        @media (max-width: 768px) {
+            .navbar { padding: 1rem 1.5rem; }
+            .alerts-container { padding: 0 1.5rem 2rem 1.5rem; gap: 1.25rem; }
+            .stats { gap: 1rem; margin: 1.5rem auto; }
+            .card { width: 100%; }
         }
     </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
     <h2>🛡 CCTV Security Matrix</h2>
     <a href="{% url 'logout' %}">Logout</a>
 </div>
 
-<!-- STATS -->
 <div class="stats">
     <div class="card">
         <h3>Total Alerts</h3>

@@ -1,24 +1,56 @@
 /* ==========================================================================
-   AUTHENTICATION & LANDING SUBSYSTEM PORTAL STYLES (EXTENSIONS)
+   GLOBAL DESIGN VARIABLES & ENGINES
    ========================================================================== */
+:root {
+    --bg-dark-core: #070b14;
+    --glass-panel-bg: rgba(15, 23, 42, 0.45);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    
+    /* System Cyber Colors */
+    --neon-blue: #06b6d4;
+    --neon-green: #10b981;
+    --neon-red: #ef4444;
+    
+    /* Typography & Layers */
+    --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-telemetry: 'Courier New', Courier, monospace;
+    --layer-blur: blur(16px);
+    --smooth-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* Shared Background Engine for Auth Modules */
-body.auth-viewport, body.security-matrix-bg {
+/* Global Document Resets */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
     font-family: var(--font-ui);
     background-color: var(--bg-dark-core);
+    color: #f8fafc;
+    min-height: 100vh;
+}
+
+body.security-matrix-bg, body.auth-viewport {
     background-image: 
         radial-gradient(circle at 50% 30%, #0d1b3a 0%, #070b14 80%),
         linear-gradient(rgba(6, 182, 212, 0.01) 1px, transparent 1px),
         linear-gradient(90deg, rgba(6, 182, 212, 0.01) 1px, transparent 1px);
     background-size: 100% 100%, 25px 25px, 25px 25px;
-    color: #f8fafc;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
 }
 
-/* Landing Interactive Cursor Grid Tracker */
+body.auth-viewport {
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+/* Landing Interactive Background Grid Tracker overlay */
 .grid-overlay {
     position: fixed;
     top: 0;
@@ -27,10 +59,9 @@ body.auth-viewport, body.security-matrix-bg {
     height: 100vh;
     pointer-events: none;
     z-index: 1;
-    transition: background 0.1s ease;
 }
 
-/* Global Main Navigation Bar (For Home Page) */
+
 .main-navbar {
     display: flex;
     justify-content: space-between;
@@ -50,17 +81,6 @@ body.auth-viewport, body.security-matrix-bg {
     gap: 0.75rem;
 }
 
-.pulse-node {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-}
-.neon-green-pulse {
-    background: var(--neon-green);
-    box-shadow: 0 0 10px var(--neon-green);
-    animation: activePulse 2s infinite;
-}
-
 .brand-text-logo {
     font-family: var(--font-telemetry);
     font-weight: 600;
@@ -69,16 +89,21 @@ body.auth-viewport, body.security-matrix-bg {
     color: #ffffff;
 }
 
+.pulse-node {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.neon-green-pulse {
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+    animation: activePulse 2s infinite;
+}
+
 .nav-links {
     display: flex;
     gap: 1.25rem;
-}
-
-/* Authentication Layout Box Structure */
-body.auth-viewport {
-    justify-content: center;
-    align-items: center;
-    padding: 1.5rem;
 }
 
 .auth-glass-box {
@@ -124,7 +149,7 @@ body.auth-viewport {
     color: #64748b;
 }
 
-/* High-tech Form Input Clusters */
+/* Input Fields Containers & Inner Glyphs Overlay Padding */
 .auth-form {
     display: flex;
     flex-direction: column;
@@ -178,12 +203,11 @@ body.auth-viewport {
     box-shadow: 0 0 10px rgba(6, 182, 212, 0.15);
 }
 
-.field-wrapper input:focus + .field-icon,
-.field-wrapper input:focus ~ .field-icon {
+.field-wrapper input:focus + .field-icon {
     color: var(--neon-blue);
 }
 
-/* Authentication Action Control Components */
+/* Authentication Actions and Footers */
 .btn-auth-submit {
     width: 100%;
     padding: 12px;
@@ -229,40 +253,19 @@ body.auth-viewport {
     text-decoration: underline;
 }
 
-/* Feedback Errors Logging Layout Block */
-.validation-error-box {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.25);
-    color: #fca5a5;
+/* Feedback Notifications and Errors Logging */
+.auth-toast {
     padding: 10px 14px;
     border-radius: 8px;
-    font-size: 0.8rem;
     margin-bottom: 1.25rem;
-    display: none;
-    font-family: var(--font-telemetry);
-}
-
-.auth-toast {
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 1rem;
     font-size: 0.8rem;
     font-family: var(--font-telemetry);
     background: rgba(239, 68, 68, 0.15);
     border: 1px solid var(--neon-red);
     color: #fca5a5;
+    animation: cardShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-@keyframes cardShake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
-    100% { transform: translateX(0); }
-}
-
-/* ==========================================================================
-   LANDING HERO SCREEN DISPLAY VIEWPORTS (HOME PAGE)
-   ========================================================================== */
 .home-hero-viewport {
     flex: 1;
     max-width: 1400px;
@@ -333,7 +336,7 @@ body.auth-viewport {
     gap: 1.25rem;
 }
 
-/* Custom Unified Button Components */
+/* Shared Navigation & Hero Controls Components */
 .btn-nav, .btn-hero-primary, .btn-hero-secondary {
     padding: 0.65rem 1.25rem;
     font-family: var(--font-ui);
@@ -348,6 +351,7 @@ body.auth-viewport {
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #cbd5e1;
 }
+
 .btn-nav.outline-glow:hover {
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.2);
@@ -358,6 +362,7 @@ body.auth-viewport {
     background: var(--neon-blue);
     color: #070b14;
 }
+
 .btn-nav.solid-glow:hover, .btn-hero-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
@@ -375,12 +380,13 @@ body.auth-viewport {
     color: #ffffff;
     background: rgba(255, 255, 255, 0.01);
 }
+
 .btn-hero-secondary:hover {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Hero Screen Sidebar Panel Modules */
+/* Metrics Displays Sidebar Columns */
 .hero-metrics-sidebar {
     display: flex;
     flex-direction: column;
@@ -399,36 +405,32 @@ body.auth-viewport {
 .cyan-border-hover:hover { border-color: rgba(6, 182, 212, 0.3); transform: translateX(4px); }
 .green-border-hover:hover { border-color: rgba(34, 197, 94, 0.3); transform: translateX(4px); }
 
-.widget-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
 .widget-header h4 {
     font-size: 0.8rem;
     text-transform: uppercase;
     color: #64748b;
     letter-spacing: 0.75px;
+    margin-bottom: 1rem;
 }
 
 .widget-data {
     display: flex;
     flex-direction: column;
 }
+
 .widget-data .data-value {
     font-family: var(--font-telemetry);
     font-size: 1.75rem;
     font-weight: 700;
     color: #ffffff;
 }
+
 .widget-data .data-label {
     font-size: 0.8rem;
     color: #94a3b8;
 }
 
-/* ==========================================================================
-   MANUAL INJECTION SUBTERRANEAN MODULE (CREATE-ALERT PAGE)
-   ========================================================================== */
+
 .focused-action-viewport {
     display: flex;
     justify-content: center;
@@ -480,7 +482,6 @@ body.auth-viewport {
     color: #cbd5e1;
 }
 
-/* CSS Loader Ring Engine */
 .css-spinner-wheel {
     width: 24px;
     height: 24px;
@@ -512,15 +513,39 @@ body.auth-viewport {
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
 }
 
-.btn-trigger-execution:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+
+@keyframes activePulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
-/* Responsive Adaptive Bounds for Extended Modules */
+@keyframes pipelineRotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes cardShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
 @media (max-width: 968px) {
-    .home-hero-viewport { grid-template-columns: 1fr; text-align: center; gap: 3rem; padding: 0 1.5rem; margin: 3rem 0;}
-    .hero-content-block { align-items: center; }
-    .hero-title-headline { font-size: 2.5rem; }
-    .main-navbar { padding: 1rem 1.5rem; }
+    .home-hero-viewport {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3rem;
+        padding: 0 1.5rem;
+        margin: 3rem 0;
+    }
+    .hero-content-block {
+        align-items: center;
+    }
+    .hero-title-headline {
+        font-size: 2.5rem;
+    }
+    .main-navbar {
+        padding: 1rem 1.5rem;
+    }
 }

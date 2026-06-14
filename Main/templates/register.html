@@ -1,76 +1,144 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Terminal - Registration</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Telemetry Core - Register</title>
+    <style>
+        :root {
+            --bg-dark-core: #070b14;
+            --glass-panel-bg: rgba(15, 23, 42, 0.45);
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --neon-blue: #06b6d4;
+            --neon-red: #ef4444;
+            --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-telemetry: 'Courier New', Courier, monospace;
+            --layer-blur: blur(16px);
+            --smooth-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body.auth-viewport {
+            font-family: var(--font-ui);
+            background-color: var(--bg-dark-core);
+            color: #f8fafc;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 30%, #0d1b3a 0%, #070b14 80%),
+                linear-gradient(rgba(6, 182, 212, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.01) 1px, transparent 1px);
+            background-size: 100% 100%, 25px 25px, 25px 25px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; overflow-x: hidden;
+        }
+
+        .auth-glass-box {
+            background: var(--glass-panel-bg); border: 1px solid var(--border-subtle); backdrop-filter: var(--layer-blur);
+            -webkit-backdrop-filter: var(--layer-blur); border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); z-index: 5; transition: var(--smooth-transition);
+        }
+
+        .auth-glass-box.green-glow:hover { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 30px rgba(16, 185, 129, 0.15); }
+        .auth-header { text-align: center; margin-bottom: 2rem; }
+        .auth-icon-shield { display: inline-flex; padding: 12px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 50%; margin-bottom: 1rem; }
+        .auth-header h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+        .auth-header p { font-size: 0.85rem; color: #64748b; }
+
+        .auth-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .input-container { display: flex; flex-direction: column; gap: 0.5rem; }
+        .input-container label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; font-weight: 500; }
+        .field-wrapper { position: relative; display: flex; align-items: center; }
+        .field-icon { position: absolute; left: 14px; color: #475569; pointer-events: none; transition: var(--smooth-transition); }
+        
+        .field-wrapper input {
+            width: 100%; padding: 12px 14px 12px 42px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px; color: #ffffff; font-family: var(--font-ui); font-size: 0.9rem; outline: none; transition: var(--smooth-transition);
+        }
+
+        .field-wrapper input:focus { border-color: var(--neon-blue); background: rgba(15, 23, 42, 0.9); box-shadow: 0 0 10px rgba(6, 182, 212, 0.15); }
+        .field-wrapper input:focus + .field-icon { color: var(--neon-blue); }
+
+        .btn-auth-submit {
+            width: 100%; padding: 12px; background: linear-gradient(90deg, #059669, #047857); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff; font-family: var(--font-ui); font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: var(--smooth-transition); margin-top: 0.5rem;
+        }
+        .btn-auth-submit:hover { transform: translateY(-1px); box-shadow: 0 0 20px rgba(5, 150, 105, 0.4); }
+
+        .auth-footer { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #64748b; }
+        .auth-footer a { color: var(--neon-blue); text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        .auth-toast {
+            padding: 10px 14px; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.8rem; font-family: var(--font-telemetry);
+            background: rgba(239, 68, 68, 0.15); border: 1px solid var(--neon-red); color: #fca5a5; animation: cardShake 0.4s both;
+        }
+
+        @keyframes cardShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+    </style>
 </head>
 <body class="auth-viewport">
-
     <div class="auth-glass-box green-glow">
         <div class="auth-header">
             <div class="auth-icon-shield">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
             </div>
-            <h2>Node Provisioning</h2>
-            <p>Enroll alternative terminal credentials</p>
+            <h2>Register Terminal Instance</h2>
+            <p>Deploy admin master configuration access keys</p>
         </div>
 
         {% if messages %}
-            <div class="auth-messages">
-                {% for message in messages %}
-                    <div class="auth-toast {{ message.tags }}">{{ message }}</div>
-                {% endfor %}
-            </div>
+            {% for message in messages %}
+                <div class="auth-toast">{{ message }}</div>
+            {% endfor %}
         {% endif %}
-        
-        <div class="validation-error-box" id="errorBlock"></div>
 
-        <form method="POST" action="{% url 'register' %}" class="auth-form" id="registerForm">
+        <form method="POST" action="{% url 'register' %}" class="auth-form">
             {% csrf_token %}
             
             <div class="input-container">
-                <label for="username">Operator Identity Code</label>
+                <label>Username</label>
                 <div class="field-wrapper">
-                    <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <input type="text" id="username" name="username" placeholder="Choose identity tag" required>
+                    <span class="field-icon">@</span>
+                    <input type="text" name="username" placeholder="Pick system identifier..." required>
                 </div>
             </div>
 
             <div class="input-container">
-                <label for="email">Network Email Endpoint</label>
+                <label>Email Address</label>
                 <div class="field-wrapper">
-                    <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <input type="email" id="email" name="email" placeholder="operator@gmail.com" required>
+                    <span class="field-icon">✉</span>
+                    <input type="email" name="email" placeholder="root@domain.local" required>
                 </div>
             </div>
 
             <div class="input-container">
-                <label for="password">System Passkey</label>
+                <label>Master Security Key</label>
                 <div class="field-wrapper">
-                    <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    <span class="field-icon">🔒</span>
+                    <input type="password" name="password" placeholder="••••••••" required>
                 </div>
             </div>
 
             <div class="input-container">
-                <label for="confirm_password">Verify Passkey</label>
+                <label>Confirm Master Key</label>
                 <div class="field-wrapper">
-                    <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                    <span class="field-icon">🔒</span>
+                    <input type="password" name="confirm_password" placeholder="••••••••" required>
                 </div>
             </div>
 
-            <button type="submit" class="btn-auth-submit btn-reg-submit">Register Workstation</button>
+            <button type="submit" class="btn-auth-submit">Initialize Encryption Keys</button>
         </form>
 
         <div class="auth-footer">
-            <p>Active terminal link present? <a href="{% url 'login' %}">Connect here</a></p>
+            Already configured? <a href="{% url 'login' %}">Establish Console Session</a>
         </div>
     </div>
-
-    <script src="{% static 'js/auth.js' %}"></script>
 </body>
 </html>
