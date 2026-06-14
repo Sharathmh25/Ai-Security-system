@@ -76,9 +76,14 @@ WSGI_APPLICATION = 'Main.wsgi.application'
 
 # DATABASE (Render PostgreSQL ONLY)
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get("DATABASE_URL")
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sensor',
+        'USER': 'root',
+        'PASSWORD': 'Hassan@123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
 }
 
 
